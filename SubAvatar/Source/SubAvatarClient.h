@@ -37,6 +37,7 @@ typedef NSImage *(^SubAvatarImageProcessingBlock)(NSString *identity, NSImage *i
 @property (copy) SubAvatarImageProcessingBlock imageProcessingBlock;
 
 + (id)client;
++ (id)clientWithOperationQueue:(NSOperationQueue *)queue;
 
 - (void)addService:(id<SubAvatarService>)service;
 - (void)removeService:(id<SubAvatarService>)service;

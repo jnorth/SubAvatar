@@ -32,17 +32,27 @@
 }
 
 + (id)client {
-  return [[self alloc] init];
+  return [[self alloc] initWithOperationQueue:nil];
 }
 
-- (id)init {
-  self = [super init];
++ (id)clientWithOperationQueue:(NSOperationQueue *)queue {
+  return [[self alloc] initWithOperationQueue:queue];
+}
+
+- (id)initWithOperationQueue:(NSOperationQueue *)queue {
+  self = [self init];
 
   if (self) {
     _services = [NSMutableArray array];
 
     _activeLookups = [NSMutableDictionary dictionary];
-    _queue = [[NSOperationQueue alloc] init];
+
+    if (queue) {
+      _queue = queue;
+    } else {
+      _queue = [[NSOperationQueue alloc] init];
+      _queue.maxConcurrentOperationCount = 16;
+    }
   }
 
   return self;
