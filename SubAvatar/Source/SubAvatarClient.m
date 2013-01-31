@@ -92,7 +92,7 @@
   // Image cache miss...
 
   // If there is already an operation for the identity, piggy-back on that one
-  SubAvatarOperation *activeOperation = _activeLookups[identity];
+  __weak SubAvatarOperation *activeOperation = _activeLookups[identity];
 
   if (activeOperation) {
     void (^tBlock)(void) = activeOperation.completionBlock;
@@ -106,7 +106,7 @@
   }
 
   // Otherwise, create a new operation
-  SubAvatarOperation *operation = [SubAvatarOperation operationWithIdentity:identity services:_services];
+  __weak SubAvatarOperation *operation = [SubAvatarOperation operationWithIdentity:identity services:_services];
 
   operation.completionBlock = ^{
     // Remove operation from active list
