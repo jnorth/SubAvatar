@@ -98,8 +98,11 @@
     void (^tBlock)(void) = activeOperation.completionBlock;
 
     activeOperation.completionBlock = ^{
-      tBlock();
-      block(activeOperation.identity, [self cachedImageForIdentity:activeOperation.identity]);
+      if (tBlock) tBlock();
+
+      dispatch_async(dispatch_get_main_queue(), ^{
+        block(activeOperation.identity, [self cachedImageForIdentity:activeOperation.identity]);
+      });
     };
 
     return;
@@ -122,7 +125,11 @@
     _cache[operation.identity] = operation.image ?: [NSNull null];
 
     // Call block
-    if (block) block(operation.identity, operation.image);
+    if (block) {
+      dispatch_async(dispatch_get_main_queue(), ^{
+        block(operation.identity, operation.image);
+      });
+    }
   };
 
   _activeLookups[identity] = operation;
